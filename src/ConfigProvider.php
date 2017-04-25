@@ -3,7 +3,7 @@
 namespace SessionMiddleware;
 
 use Zend\Session;
-use Zend\Session\ConfigProvider as ZendSessionConfigProvider;
+use SessionMiddleware;
 
 /**
  * Class ConfigProvider
@@ -16,12 +16,12 @@ class ConfigProvider
     public function __invoke()
     {
         return [
-            'dependencies' => $this->getZendSessionDependencies(),
-            'session' => $this->getSessionConfig(),
+            'dependencies' => $this->getDependencies(),
+            'session' => $this->getDefaultSessionConfig(),
         ];
     }
 
-    public function getSessionConfig()
+    public function getDefaultSessionConfig()
     {
         return [
             'config' => [
@@ -31,15 +31,20 @@ class ConfigProvider
                 ],
             ],
             'storage' => Session\Storage\SessionArrayStorage::class,
-            'validators' => [
-                Session\Validator\RemoteAddr::class,
-                Session\Validator\HttpUserAgent::class
-            ],
         ];
     }
 
-    public function getZendSessionDependencies()
+    public function getDependencies()
     {
-        return (new ZendSessionConfigProvider())->getDependencyConfig();
+        return [
+            'invokables' => [
+            ],
+            'factories'  => [
+                Middleware\SessionMiddleware::class => Factory\SessionMiddlewareFactory::class,
+                Session\SessionManager::class => Factory\SessionManagerFactory::class,
+            ],
+            'abstract_factories' => [
+            ]
+        ];
     }
 }
