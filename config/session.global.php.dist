@@ -8,9 +8,13 @@ return [
     'session' => [
         'config' => [
             'options' => [
-                'name' => 'my_session_name',
+                'name'            => 'my_session_name',
+                'use_cookies'     => true,
+                'cookie_lifetime' => 7200,
                 'cookie_httponly' => true,
-                'use_cookies' => true,
+                'cookie_secure'   => false,
+                'cookie_path'     => null,
+                'cookie_domain'   => null,
             ],
         ],
     ],
