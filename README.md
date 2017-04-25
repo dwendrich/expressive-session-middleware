@@ -118,7 +118,7 @@ In another part of the application you may want to access this data:
 ```php
 use Zend\Session\Container;
  
-$container = Container('my_namepsace');
+$container = Container('my_namespace');
  
 // read the content from the `item` key
 $foo = $container->item;
