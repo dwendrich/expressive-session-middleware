@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * For further information on zend session configuration options have a look at:
+ * @see https://docs.zendframework.com/zend-session/config/#standard-config
+ */
+return [
+    'session' => [
+        'config' => [
+            'options' => [
+                'name' => 'my_session_name',
+                'cookie_httponly' => true,
+                'use_cookies' => true,
+            ],
+        ],
+    ],
+];
