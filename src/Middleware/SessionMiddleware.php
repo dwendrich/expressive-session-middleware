@@ -16,7 +16,7 @@ use Zend\Session\SessionManager;
  */
 class SessionMiddleware implements MiddlewareInterface
 {
-    const REQUEST_ATTRIBUTE_KEY = 'session_manager';
+    const REQUEST_ATTRIBUTE_KEY = self::class . '::session_manager';
 
     /**
      * @var SessionManager
