@@ -18,7 +18,7 @@ class SessionMiddlewareTest extends TestCase
 
         $request = $this->prophesize(ServerRequestInterface::class);
         $request->withAttribute(
-            SessionMiddleware::REQUEST_ATTRIBUTE_KEY,
+            SessionMiddleware::SESSION_ATTRIBUTE,
             Argument::type(SessionManager::class)
         )->willReturn(
             $request->reveal()
