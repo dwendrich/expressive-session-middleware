@@ -16,7 +16,7 @@ use Zend\Session\SessionManager;
  */
 class SessionMiddleware implements MiddlewareInterface
 {
-    const REQUEST_ATTRIBUTE_KEY = self::class . '::session_manager';
+    const SESSION_ATTRIBUTE = self::class . '::session_manager';
 
     /**
      * @var SessionManager
@@ -47,10 +47,10 @@ class SessionMiddleware implements MiddlewareInterface
         // start session handling
         $this->sessionManager->start();
 
-        // pass on session manager as request attribute
-        $request = $request->withAttribute(self::REQUEST_ATTRIBUTE_KEY, $this->sessionManager);
-
-        // delegate request to next middleware in stack
-        return $delegate->process($request);
+        // call next middleware in stack and directly return response
+        return $delegate->process(
+            // pass on session manager as request attribute
+            $request->withAttribute(self::SESSION_ATTRIBUTE, $this->sessionManager)
+        );
     }
 }
