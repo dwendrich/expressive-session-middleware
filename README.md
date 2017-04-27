@@ -90,7 +90,7 @@ by testing against the request attribute:
  */
 public function process(ServerRequestInterface $request, DelegateInterface $delegate)
 {
-    $sessionManager = $request->getAttribute(SessionMiddleware::REQUEST_ATTRIBUTE_KEY, false);
+    $sessionManager = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE, false);
     
     if ($sessionManager) {
         // sessionManager is present and can be used
