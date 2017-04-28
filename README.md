@@ -1,6 +1,10 @@
 # expressive-session-middleware
 Session handling middleware based on zend-session for use in zend expressive 2.0 applications.
 
+[![Build Status](https://travis-ci.org/dwendrich/expressive-session-middleware.svg?branch=master)](https://travis-ci.org/dwendrich/expressive-session-middleware)
+[![Coverage Status](https://img.shields.io/codecov/c/github/dwendrich/expressive-session-middleware.svg?style=flat)](https://codecov.io/gh/dwendrich/expressive-session-middleware)
+[![Latest Stable Version](http://img.shields.io/packagist/v/dwendrich/expressive-session-middleware.svg?style=flat)](https://packagist.org/packages/dwendrich/expressive-session-middleware)
+
 ## Requirements
 * PHP 7.0 or above
 * [zendframework/zend-session](https://docs.zendframework.com/zend-session/)
