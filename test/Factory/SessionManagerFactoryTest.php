@@ -130,4 +130,35 @@ class SessionManagerFactoryTest extends TestCase
         /** @var Session\SessionManager $sessionManager */
         $sessionManager = $factory->__invoke($container->reveal(), 'foo');
     }
+
+    public function testCreateInstanceWithSessionSaveHandlerFetchedByServiceManager()
+    {
+        $config = [
+            'session' => [
+                'config' => [
+                    'class' => Session\Config\SessionConfig::class,
+                ],
+                'storage' => Session\Storage\SessionArrayStorage::class,
+                'save_handler' => 'Application\Test\SessionSaveHandler',
+            ],
+        ];
+
+        $container = $this->prophesize(ServiceManager::class);
+        $container->get('config')->willReturn($config);
+
+        $saveHandlerInstance = $this->prophesize(Session\SaveHandler\SaveHandlerInterface::class);
+        $container->get('Application\Test\SessionSaveHandler')->willReturn(
+            $saveHandlerInstance->reveal()
+        );
+
+        $factory = new SessionManagerFactory();
+
+        /** @var Session\SessionManager $sessionManager */
+        $sessionManager = $factory->__invoke($container->reveal(), 'foo');
+
+        $this->assertInstanceOf(
+            Session\SaveHandler\SaveHandlerInterface::class,
+            $sessionManager->getSaveHandler()
+        );
+    }
 }
