@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SessionMiddleware\Middleware;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface as DelegateInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Session\SessionManager;
@@ -42,13 +44,13 @@ class SessionMiddleware implements MiddlewareInterface
      *
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate) : ResponseInterface
     {
         // start session handling
         $this->sessionManager->start();
 
         // call next middleware in stack and directly return response
-        return $delegate->process(
+        return $delegate->handle(
             // pass on session manager as request attribute
             $request->withAttribute(self::SESSION_ATTRIBUTE, $this->sessionManager)
         );

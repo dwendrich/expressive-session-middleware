@@ -1,24 +1,29 @@
 # expressive-session-middleware
-Session handling middleware based on zend-session for use in zend expressive 2.0 applications.
+Session handling middleware based on zend-session for use in zend expressive 3 applications.
 
 [![Build Status](https://travis-ci.org/dwendrich/expressive-session-middleware.svg?branch=master)](https://travis-ci.org/dwendrich/expressive-session-middleware)
 [![Coverage Status](https://img.shields.io/codecov/c/github/dwendrich/expressive-session-middleware.svg?style=flat)](https://codecov.io/gh/dwendrich/expressive-session-middleware)
 [![Latest Stable Version](http://img.shields.io/packagist/v/dwendrich/expressive-session-middleware.svg?style=flat)](https://packagist.org/packages/dwendrich/expressive-session-middleware)
 
+## PSR-15 Support
+This version supports [PSR-15](https://www.php-fig.org/psr/psr-15) instead of http-interop/http-middleware interfaces,
+as currently implemented by zend expressive 3. For use with older versions of zend expressive, please refer to version
+0.1.9.
+
 ## Requirements
-* PHP 7.0 or above
+* PHP 7.1 or above
 * [zendframework/zend-session](https://docs.zendframework.com/zend-session/)
 
 ## Installation
 Install the latest version with composer. For information on how to get composer or how to use it, please refer to [getcomposer.org](http://getcomposer.org).
 ```sh
-$ composer require dwendrich/expressive-soap-middleware
+$ composer require dwendrich/expressive-session-middleware
 ```
 
 If during installation you are prompted to inject `Zend\Session\ConfigProvider` into your configuration, you can simply
 ignore and continue without it. All relevant configuration is part of `SessionMiddleware\ConfigProvider`.
 
-As part of a zend-expressive 2.0 application add `SessionMiddleware\ConfigProvider::class` to `config/config.php`:
+As part of a zend-expressive application add `SessionMiddleware\ConfigProvider::class` to `config/config.php`:
 ```php
 $aggregator = new ConfigAggregator([
  
@@ -49,7 +54,7 @@ You can add the middleware to the file `config/pipeline.php`:
 $app->pipe(SessionMiddleware::class);
  
 // Register the routing middleware in the middleware pipeline
-$app->pipeRoutingMiddleware();
+$app->pipe(\Zend\Expressive\Router\Middleware\RouteMiddleware::class);
 $app->pipe(ImplicitHeadMiddleware::class);
 $app->pipe(ImplicitOptionsMiddleware::class);
 $app->pipe(UrlHelperMiddleware::class);
@@ -58,7 +63,7 @@ Depending on which middleware should get access to the session, you should prepe
 Commonly before registering the routing middleware is a good way to go.
 
 This way the middleware is invoked on every request to your application. Since session handling may produce some
-overhead which isn't always needed there is an alternative.
+overhead, which isn't always needed, there is an alternative:
 
 #### 2. Add the middleware to a specific route
 Add a route definition to either `config/routes.php` or a `RouteDelegator` as part of your application:
@@ -75,7 +80,7 @@ $app->route(
 ```
 This way session handling is bound to a specific path in your application where it may be needed.
 
-For further information on programmatic pipelines and routing in zend expressive 2.0 please refer to the
+For further information on programmatic pipelines and routing in zend expressive please refer to the
 [documentation](https://docs.zendframework.com/zend-expressive/cookbook/autowiring-routes-and-pipelines/).
 
 ## Basic usage
@@ -92,7 +97,7 @@ by testing against the request attribute:
  *
  * @return ResponseInterface
  */
-public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+public function process(ServerRequestInterface $request, DelegateInterface $delegate) : ResponseInterface
 {
     $sessionManager = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE, false);
     
