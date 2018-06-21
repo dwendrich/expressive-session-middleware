@@ -2,7 +2,7 @@
 
 namespace SessionMiddlewareTest\Middleware;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
+use Psr\Http\Server\RequestHandlerInterface as DelegateInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +27,7 @@ class SessionMiddlewareTest extends TestCase
         $response = $this->prophesize(ResponseInterface::class)->reveal();
         $delegate = $this->prophesize(DelegateInterface::class);
 
-        $delegate->process(Argument::any())->will(function () use(&$invoked, $response) {
+        $delegate->handle(Argument::any())->will(function () use(&$invoked, $response) {
             $invoked = true;
             return $response;
         });
